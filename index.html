@@ -1,49 +1,93 @@
-<!DOCTYPE html>
 <html>
+<head><title>Snowball credit demo</title>
+<script>
+   var require={
+      paths:{jquery:"//code.jquery.com/jquery-latest.min",
+            angular:"//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min"
+            }
+   };
+</script>
+<script src="jscript/require.js" data-main="js/main.js"></script>
+</head>
+<body>
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Snowball method : Demonstrating the &#39;snowball method&#39; of debt removal" />
+<link href="snowball.css" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <table ng-controller="CurrentCreditorCtrl">
+      <tr>
+	<td>
+	  Starting Month: <select ng-model="currentMonth" ng-default=0>
+	    <option value=0 selected>Jan</option>
+	    <option value=1>Feb</option>
+	    <option value=2>Mar</option>
+	    <option value=3>Apr</option>
+	    <option value=4>May</option>
+	    <option value=5>Jun</option>
+	    <option value=6>Jul</option>
+	    <option value=7>Aug</option>
+	    <option value=8>Sep</option>
+	    <option value=9>Oct</option>
+	    <option value=10>Nov</option>
+	    <option value=11>Dec</option>
+                          </select> / <input type=text ng-model="currentYear" id="currentYear"
+	  length=4 size=4><br/>
+	  Seed cash: <input type=text ng-model="seedCash" id="seedCash"><br/>
+          <table id="current" cellspacing=0>
+	    <tr>
+	      <td>Delete</td>
+	      <td>Name</td>
+	      <td>Current Balance</td>
+	      <td>Minumum Payment</td>
+	      <td>Monthly charge</td>
+	    </tr>
+	    <tr class="Creditor" 
+		ng-repeat="creditor in creditors">
+	      <td class="deleteMe" ng-click="deleteMe($index)">X</td>
+	      <td class="creditorName"><input type=text ng-model="creditor.Name"></td>
+	      <td class="creditorAccount"><input type=text size=6 ng-model="creditor.account"></td>
+	      <td class="creditorMinpay"><input type=text size=5 ng-model="creditor.minpay"></td>
+	      <td class="creditorCharge"><input type=text size=5 ng-model="creditor.monthly_charge"></td>
+	    </tr>
+          </table>
+	  <form ng-submit="addNewCreditor()">
+	    <input type=text ng-model="NewCreditorName" placeholder="New Creditor"><br/></form>
+	  <form ng-submit="runPlan()">
+	    Use Snowball Strategy?<br/>
+            <input type="radio" ng-model="snowBall" value="yes" checked>Yes
+            <input type="radio" ng-model="snowBall" value="no">No<br/>  
+	    <input type=submit value="Run Plan">
+          </form>
+	</td>
+      </tr>
+      <tr>
+	<td>
+	  <button id='expandAll'>Expand
+	  All</button><button id='collapseAll'>Collapse All</button>
+	  <table id="outcome" cellspacing=0>
 
-    <title>Snowball method</title>
-  </head>
+  <tr ng-repeat='row in outcome' class='collapsable collapsed'>
+    <td>
+      <div class='collapseToggle'>&gt;</div>
+    </td>
+    <td><span class="timeSpan">{{row.startingName}} -
+    {{row.endingName}}</span>&nbsp;
+      <span class="accounts_display">{{row.numAccounts}} accounts</span><br/>
+      <table class='detail' cellspacing=0>
+        <tr><td>Name</td><td>Balance at start of term</td><td>Payment</td><tr>
+	<tr ng-repeat="creditor in row.table" class="outcomeDetail">
+	  <td class="creditorName">{{creditor.Name}}</td>
+	  <td class="creditorAccount">${{creditor.account}}</td>
+	  <td class="creditorPay">${{creditor.pay}}/month</td>
+	</tr>
+      </table>
+    </td>
+  </tr>
 
-  <body>
+	  </table>
+	</td>
+      </tr>
+    </table>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/jhiltscher42/snowball_method">View on GitHub</a>
 
-          <h1 id="project_title">Snowball method</h1>
-          <h2 id="project_tagline">Demonstrating the &#39;snowball method&#39; of debt removal</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/jhiltscher42/snowball_method/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/jhiltscher42/snowball_method/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <p>OK</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Snowball method maintained by <a href="https://github.com/jhiltscher42">jhiltscher42</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
+</body>
 </html>
