@@ -1,0 +1,7 @@
+define([],function(){
+	function CurrentCreditorControl($scope){
+	}
+
+	window.CurrentCreditorCtrl=CurrentCreditorControl;
+
+    });

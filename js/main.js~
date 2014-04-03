@@ -1,0 +1,184 @@
+require(["snowball","jquery","processTemplate","functional"],function(snowball,$,processTemplate,f_){
+
+	var isEditting=false;
+
+	var creditors=[
+		       ];
+
+	function findCreditor(creditorName){
+	    for (var n=0;n<creditors.length;n++)
+		{
+		    if (creditors[n].Name==creditorName){
+			return n;
+		    }
+		}
+	    return -1;
+	    
+	}
+
+	function deleteCreditor(index){
+	    creditors.splice(index,1);
+	    updateCreditorDisplay();
+	}
+
+	function updateCreditorDisplay(){
+	    //clear the current display
+	    var current=$("#current").html($(processTemplate($("#creditorHead").html())));
+	    var creditorRowTemplate=$("#creditorRow").html();
+	    creditors.sort(f_.by("account")).forEach(function(creditor){
+		    current.append($(processTemplate(creditorRowTemplate,creditor)));
+		});
+	    
+	}
+
+	function showOutcome(results){
+	    console.log(results);
+	    var outcome=$("#outcome").html("");
+	    var outcomeRow=$("#outcomeRow").html();
+	    results.forEach(function(result){
+		    var $row=$(processTemplate(outcomeRow,result));
+		    $row.find(".detail").append($(processTemplate($("#outcomeDetailHeader").html())));
+		    result.table.forEach(function(creditor){
+			    $row.find(".detail").append($(processTemplate($("#outcomeDetailRow").html(),creditor)));
+			});
+		    outcome.append($row);
+		});
+	}
+
+	$(function()
+	  {
+		//initially, hide the creditorDetail window
+		$("#creditorDetail").hide();
+		$("form").submit(function(){return false;});
+
+		$("#currentYear").val((new Date()).getFullYear());
+
+		$("body").on("click",".deleteMe",function(ev){
+			var creditorName=$(this).parent().find(".creditorName").text();
+			var creditorIndex=findCreditor(creditorName);
+			if (prompt("Delete "+creditorName,"Yes")){
+			    deleteCreditor(creditorIndex);
+			}
+			ev.stopPropagation();
+			//console.log($(this).parent().find(".creditorName").text());
+		    });
+
+		$("body").on("click",".collapseToggle",function(){$(this).parents(".collapsable").toggleClass("collapsed");});
+
+		$("#NewCreditorName").focus(function(){
+			isEditting=true;
+		    }).blur(function(){
+		        isEditting=false;
+		    }).keyup(function(ev){
+			if (ev.keyCode==27){$(this).val(""); $(this).blur();}
+			else if (ev.keyCode==13){
+			    var newName=$(this).val();
+			    $(this).val("");
+			    if (newName.length){
+				if (findCreditor(newName)==-1){
+				    creditors.push({Name:newName,account:0,minpay:0,monthly_charge:0});
+				    updateCreditorDisplay();
+				}
+			    }
+			    $(this).blur();
+		       	}
+	       	    });
+
+		$("#expandAll").click(function(){
+			$(".collapsable").removeClass("collapsed");
+		    });
+
+		$("#collapseAll").click(function(){
+			$(".collapsable").addClass("collapsed");
+		    });
+
+		$("body").on("click",".edittable",function(){
+			var creditorName=$(this).parent("tr").find(".creditorName").text();
+			console.log(creditorName);
+			var creditorIndex=findCreditor(creditorName);
+			var $editting=$(this);
+			var editingProp=$editting.attr("rel");
+
+			var oldVal=$editting.text();
+
+			isEditting=true;
+
+			function nope(){
+			    isEditting=false;
+			    $editting.html("").text(oldVal);
+			}
+
+			var editEl=$("<input type=text>").val(creditors[creditorIndex][editingProp]).on("blur",function(){
+				$editting.html("").text(editEl.val());
+				if (editEl.val().length==0) {
+				    nope();
+				}
+				else if (editingProp) {
+				    creditors[creditorIndex][editingProp]=editEl.val();
+				    updateCreditorDisplay();
+				    isEditting=false;
+				}
+			    }).keyup(function(ev){
+				    if (ev.keyCode==27) nope();
+				    else if (ev.keyCode==13){
+					ev.stopPropagation();
+					editEl.blur();
+				    }
+				});
+			
+			$editting.html(editEl);
+			editEl.focus();
+		    });
+
+		//populate the month drop down
+		snowball.getMonths().forEach(function(el,index){
+			$("#currentMonth").append($("<option/>").val(index).text(el));
+		    });
+		    
+		$("#addCreditor").click(function(){
+			//show the creditorDetail window, and initialize the values to blank
+			editCreditor({});
+		    });
+
+		$("#creditorDetail #cancelChanges").click(function(){
+		    $("#creditorDetail").hide();
+		});
+
+		$("#creditorDetail #saveCreditor").click(function()
+		 {
+			//validateCreditor, save if valid (creating new if it didn't exist)
+			var possible={Name:$("#cName").val(),
+				      account:parseFloat($("#cAccount").val()),
+				      minpay:parseFloat($("#cMinPay").val()),
+				      monthly_charge:parseFloat($("#cCharge").val())};
+			
+			if (possible.Name.length && possible.account > 0 && possible.minpay > 0 && possible.monthly_charge >=0)
+			    {
+				saveCreditor(possible);
+			    }
+
+			//hide the creditorDetail window
+			$("#creditorDetail").hide();
+		 });
+
+		$("#doIt").click(function()
+		 {
+		     if (isEditting) return;
+		     var results=snowball.doIt({thisMonth:$("#currentMonth").prop("selectedIndex"),
+						CreditorsArray:creditors,
+						Year:$("#currentYear").val(),
+						extraCash:parseFloat($("#seedCash").val()),
+						dontSnowball:$("#snowBallOff").attr("checked")=="checked"});
+
+		     var brokenDown=snowball.breakItDown(results);
+
+		     console.log(results);
+
+		     showOutcome(brokenDown);
+		 });
+
+		updateCreditorDisplay();
+
+	  });
+
+    });
