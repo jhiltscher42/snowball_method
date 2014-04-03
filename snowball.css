@@ -1,0 +1,68 @@
+   .accounts_display {
+      text-align:right;
+   }
+
+   .edittable {
+     cursor:pointer;
+   } 
+
+   #outcome {
+       width:500px;
+   }
+
+   .collapsed .detail {
+      display:none;
+   }
+
+   .detail {
+      display:block;
+   }
+   
+   .collapsable td {
+      vertical-align: top;
+   }
+
+   .collapseToggle {
+      font-style: bold;
+      font-color: brown;
+      transform:rotate(90deg);
+      -ms-transform:rotate(90deg);
+      -webkit-transform:rotate(90deg);
+   }
+
+   .collapsed .collapseToggle {
+      transform:rotate(0deg);
+      -ms-transform:rotate(0deg);
+      -webkit-transform:rotate(0deg);
+   }
+   
+   .creditorAccount, .creditorMinpay, .creditorCharge, .creditorPay {
+      text-align:right;
+   }
+
+   .deleteMe {
+      text-align:center;
+   }
+
+   #current {   /* the current table of all creditors */
+      border: solid;
+      border-width: 1px;
+   }
+
+   #current td {
+      border: solid;
+      border-width: 1px;
+       margin: 5px;
+      }
+
+   .detail {
+      border: solid;
+      border-width: 1px;
+   } 
+
+   .detail td {
+     border:solid;
+     border-width:1px;
+    }
+
+ 
