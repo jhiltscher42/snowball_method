@@ -46,11 +46,21 @@
 
    .deleteMe {
       text-align:center;
+      background-color:red;
+      color:white;
+      font-weight: bold;
    }
 
+   .heading {
+       background-color:#44FF44
+   }
+   
+   
+   
    #current {   /* the current table of all creditors */
       border: solid;
       border-width: 1px;
+      background-color:grey;
    }
 
    #current td {
@@ -70,3 +80,6 @@
     }
 
  
+   #arrow {
+       width:1.5em;
+}
