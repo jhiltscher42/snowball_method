@@ -88,8 +88,8 @@ define(["functional"],function(f_){
 			});
 		});
 
-	    console.log(processArray);
-	    console.log(dontSnowball);
+	    //console.log(processArray);
+	    //console.log(dontSnowball);
 
 	    var output=[];
 

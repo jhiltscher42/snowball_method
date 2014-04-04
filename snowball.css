@@ -2,6 +2,10 @@
       text-align:right;
    }
 
+   .hidden {
+       display: none;
+   }
+
    .edittable {
      cursor:pointer;
    } 

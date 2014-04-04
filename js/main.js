@@ -1,4 +1,4 @@
-require(["snowball","jquery","functional","angular"],function(snowball,$,f_){
+require(["snowball","jquery","functional","angular","angularCookie"],function(snowball,$,f_,ng){
 
 
 	$(function()
@@ -15,16 +15,41 @@ require(["snowball","jquery","functional","angular"],function(snowball,$,f_){
 			$(".collapsable").addClass("collapsed");
 		    });
 
-		var theApp=angular.module('theApp',[])
-		    .controller('CurrentCreditorCtrl',["$scope",
-		       function CurrentCreditorControl($scope){
+		var theApp=angular.module('theApp',['ngCookies'])
+		    .controller('CurrentCreditorCtrl',["$scope","$cookies",
+		       function CurrentCreditorControl($scope,$cookies){
 			   $scope.creditors=[
 					     ];
+			   if (localStorage && localStorage.creditors)
+			       {
+				   try{
+				       $scope.creditors=JSON.parse(localStorage.creditors);
+				   }
+				   catch(e){
+				   }
+			       }
+			   $scope.$watch(function(scope){
+				   return JSON.stringify(scope.creditors);
+			       },function(){
+				   if (localStorage && JSON)
+				       {
+					   localStorage.creditors=JSON.stringify($scope.creditors);
+				       }
+			       });
 			   $scope.snowBall='yes';
 			   $scope.NewCreditorName="";
 			   $scope.currentMonth=0;
 			   $scope.currentYear=(new Date()).getFullYear();
 			   $scope.outcome=[];
+			   $scope.longDescription=$cookies.IKnowThis;
+			   if ($scope.longDescription=="hidden")
+			       {
+				   $scope.shortDescription="";
+			       }
+			   else
+			       {
+				   $scope.shortDescription="hidden";
+			       }
 
 			   $scope.addNewCreditor=function(){
 			       if ($scope.NewCreditorName.length == 0) return;
@@ -35,9 +60,23 @@ require(["snowball","jquery","functional","angular"],function(snowball,$,f_){
 			   $scope.deleteMe=function(row){
 			       $scope.creditors.splice(row,1);
 			   }
-			   
+
+			   $scope.toggleIKnowThis=function(){
+			       if ($scope.longDescription!="hidden")
+				   {
+				       $scope.longDescription=$cookies.IKnowThis="hidden";
+				       $scope.shortDescription="";
+				   }
+			       else
+				   {
+				       $scope.longDescription=$cookies.IKnowThis="";
+				       $scope.shortDescription="hidden";
+				   }
+			       //console.log($scope.longDescription);
+			   }
+
 			   $scope.runPlan=function(){
-			       console.log($scope.creditors);
+			       //console.log($scope.creditors);
 			       $scope.months=snowball.doIt(
 			                     {
                                               thisMonth:$scope.currentMonth,
@@ -47,7 +86,7 @@ require(["snowball","jquery","functional","angular"],function(snowball,$,f_){
                                            dontSnowball:($scope.snowBall=="no")	   
 					     });
 			       $scope.outcome=snowball.breakItDown($scope.months);
-			       console.log($scope.outcome);
+			       //console.log($scope.outcome);
 			   }
 			   
 			   
