@@ -44,11 +44,18 @@
       text-align:right;
    }
 
-   .deleteMe {
+   .deleteMe div:even {
+      text-align:center;
+      width:50px;
+   }
+ 
+   .deleteMe span {
       text-align:center;
       background-color:red;
-      color:white;
       font-weight: bold;
+      color: white;
+      width: 50px;
+      display:block;
    }
 
    .heading {
@@ -83,3 +90,8 @@
    #arrow {
        width:1.5em;
 }
+
+   .gridStyle {
+       width: 600px;
+       height: 400px;
+       }

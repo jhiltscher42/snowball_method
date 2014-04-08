@@ -1,4 +1,4 @@
-require(["snowball","jquery","functional","angular","angularCookie"],function(snowball,$,f_,ng){
+require(["snowball","jquery","functional","angular","angularCookie","angularGrid"],function(snowball,$,f_,ng){
 
 
 	$(function()
@@ -15,7 +15,7 @@ require(["snowball","jquery","functional","angular","angularCookie"],function(sn
 			$(".collapsable").addClass("collapsed");
 		    });
 
-		var theApp=angular.module('theApp',['ngCookies'])
+		var theApp=angular.module('theApp',['ngCookies','ngGrid'])
 		    .controller('CurrentCreditorCtrl',["$scope","$cookies",
 		       function CurrentCreditorControl($scope,$cookies){
 			   $scope.creditors=[
@@ -51,12 +51,29 @@ require(["snowball","jquery","functional","angular","angularCookie"],function(sn
 				   $scope.shortDescription="hidden";
 			       }
 
+			   $scope.gridOptions={data:'creditors',
+					       enableCellSelection:true,
+					       enableRowSelection:false,
+					       enableCellEditOnFocus:true,
+					       enableColumnResize:true,
+			                       columnDefs:[{cellClass:'deleteMe',field:'',cellTemplate:'<span class="deleteMe" ng-click="delete_me(row)">X</button>',
+							    displayName:'Delete',enableCellEdit:false,width:60},
+			                                   {field:'Name',displayName:'Name',enableCellEdit:true},
+			   {field:'account',displayName:'Current Balance',enableCellEdit:true, cellFilter:"currency", cellClass:"accounts_display"},
+			   {field:'minpay',displayName:'Minimum Payment',enableCellEdit:true, cellFilter:"currency", cellClass:"accounts_display", width:150},
+			   {field:'monthly_charge',displayName:'Monthly charge',enableCellEdit:true,cellFilter:"currency", cellClass:"accounts_display"}
+						   ]};
+
 			   $scope.addNewCreditor=function(){
 			       if ($scope.NewCreditorName.length == 0) return;
 			       $scope.creditors.push({Name:$scope.NewCreditorName,account:0,minpay:0,monthly_charge:0});
 			       $scope.NewCreditorName="";
 			   }
-			   
+
+			   $scope.delete_me=function(row){
+			       $scope.deleteMe($scope.creditors.indexOf(row.entity));
+			   }
+
 			   $scope.deleteMe=function(row){
 			       $scope.creditors.splice(row,1);
 			   }

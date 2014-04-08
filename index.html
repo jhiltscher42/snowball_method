@@ -4,11 +4,13 @@
    var require={
       paths:{jquery:"//code.jquery.com/jquery-latest.min",
             angular:"//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular",
-            angularCookie:"//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-cookies.min"
+            angularCookie:"//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-cookies.min",
+            angularGrid:"../jscript/ng-grid-2.0.7.min"
             },
       shim:{
            angular:{exports:'angular'},
-           angularCookie:{deps:['angular']}
+           angularCookie:{deps:['angular']},
+           angularGrid:{deps:['angular']}
            }
    
    };
@@ -18,6 +20,7 @@
 <body ng-controller="CurrentCreditorCtrl">
 
 <link href="snowball.css" rel="stylesheet">
+<link href="ng-grid.min.css" rel="stylesheet">
 
 <h3 ng-class="shortDescription"><button ng-click="toggleIKnowThis()">What was this again?</button></h3>
 <h3 ng-class="longDescription">What is
@@ -81,23 +84,8 @@ Try playing around with different seed amounts, and see how it affects the
                           </select> / <input type=text ng-model="currentYear" id="currentYear"
 	  length=4 size=4><br/>
 	  Seed cash: <input type=text ng-model="seedCash" id="seedCash"><br/>
-          <table id="current" cellspacing=0>
-	    <tr class='heading'>
-	      <td>Delete</td>
-	      <td>Name</td>
-	      <td>Current Balance</td>
-	      <td>Minumum Payment</td>
-	      <td>Monthly charge</td>
-	    </tr>
-	    <tr class="Creditor" 
-		ng-repeat="creditor in creditors">
-	      <td class="deleteMe" ng-click="deleteMe($index)">X</td>
-	      <td class="creditorName"><input type=text ng-model="creditor.Name"></td>
-	      <td class="creditorAccount"><input type=text size=6 ng-model="creditor.account"></td>
-	      <td class="creditorMinpay"><input type=text size=5 ng-model="creditor.minpay"></td>
-	      <td class="creditorCharge"><input type=text size=5 ng-model="creditor.monthly_charge"></td>
-	    </tr>
-          </table>
+	  <div class="gridStyle" ng-grid="gridOptions">
+	  </div>
 	  <form ng-submit="addNewCreditor()">
 	    <input type=text ng-model="NewCreditorName" placeholder="New Creditor">
 	    <input type=submit value="Add Creditor"><br/></form>
