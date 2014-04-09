@@ -15,6 +15,21 @@ require(["snowball","jquery","functional","angular","angularCookie","angularGrid
 			$(".collapsable").addClass("collapsed");
 		    });
 
+		function viewPane(paneName)
+		{
+		    $(".pane").removeClass("activePane");
+		    return $("#"+paneName).addClass("activePane").length;
+		}
+
+		viewPane('creditorsPane');
+		
+		$(".tabs li").click(function(){
+			if (viewPane($(this).attr("rel"))){
+				$(".tabs li").removeClass("selectedTab");
+				$(this).addClass("selectedTab");
+			    }
+		    });
+
 		var theApp=angular.module('theApp',['ngCookies','ngGrid'])
 		    .controller('CurrentCreditorCtrl',["$scope","$cookies",
 		       function CurrentCreditorControl($scope,$cookies){
@@ -41,6 +56,7 @@ require(["snowball","jquery","functional","angular","angularCookie","angularGrid
 			   $scope.currentMonth=0;
 			   $scope.currentYear=(new Date()).getFullYear();
 			   $scope.outcome=[];
+
 			   $scope.longDescription=$cookies.IKnowThis;
 			   if ($scope.longDescription=="hidden")
 			       {

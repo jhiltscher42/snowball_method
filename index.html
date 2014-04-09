@@ -65,9 +65,22 @@ Try playing around with different seed amounts, and see how it affects the
    
 </p>
 
-    <table>
-      <tr>
-	<td>
+<ul class='tabs'>
+   <li rel='creditorsPane' class='selectedTab'>Creditors</li>
+   <li rel='resultsPane'>Results</li>
+</ul>
+
+<div class='pane' id='creditorsPane'>
+
+	  <form ng-submit="addNewCreditor()">
+	    <input type=text ng-model="NewCreditorName" placeholder="New Creditor">
+	    <input type=submit value="Add Creditor"><br/></form>
+
+	  <div class="gridStyle" ng-grid="gridOptions">
+	  </div>
+</div>
+<div class='pane' id='resultsPane'>
+
 	  Starting Month: <select ng-model="currentMonth" ng-default=0>
 	    <option value=0 selected>Jan</option>
 	    <option value=1>Feb</option>
@@ -84,51 +97,46 @@ Try playing around with different seed amounts, and see how it affects the
                           </select> / <input type=text ng-model="currentYear" id="currentYear"
 	  length=4 size=4><br/>
 	  Seed cash: <input type=text ng-model="seedCash" id="seedCash"><br/>
-	  <div class="gridStyle" ng-grid="gridOptions">
-	  </div>
-	  <form ng-submit="addNewCreditor()">
-	    <input type=text ng-model="NewCreditorName" placeholder="New Creditor">
-	    <input type=submit value="Add Creditor"><br/></form>
+
+
+	  
+
+
 	  <form ng-submit="runPlan()">
 	    Use Snowball Strategy?<br/>
             <input type="radio" ng-model="snowBall" value="yes" checked>Yes
             <input type="radio" ng-model="snowBall" value="no">No<br/>  
 	    <input type=submit value="Run Plan">
           </form>
-	</td>
-      </tr>
-      <tr>
-	<td>
+
 	  <button id='expandAll'>Expand
 	  All</button><button id='collapseAll'>Collapse All</button>
 	  <table id="outcome" cellspacing=0>
 
-  <tr ng-repeat='row in outcome' class='collapsable collapsed'>
-    <td>
-      <div class='collapseToggle'><image src='images/arrow-left.png' id='arrow'></div>
-    </td>
-    <td><span class="timeSpan">{{row.startingName}} -
-    {{row.endingName}}</span>&nbsp;
-      <span class="accounts_display">{{row.numAccounts}} accounts</span><br/>
-      <table class='detail' cellspacing=0>
-        <tr class='heading'>
-	  <td>Name</td>
-	  <td>Balance at start of term</td>
-	  <td>Payment</td>
-	<tr>
-	<tr ng-repeat="creditor in row.table" class="outcomeDetail">
-	  <td class="creditorName">{{creditor.Name}}</td>
-	  <td class="creditorAccount">{{creditor.account | currency}}</td>
-	  <td class="creditorPay">{{creditor.pay | currency}}/month</td>
-	</tr>
-      </table>
-    </td>
-  </tr>
-
+	    <tr ng-repeat='row in outcome' class='collapsable collapsed'>
+	      <td>
+		<div class='collapseToggle'><image src='images/arrow-left.png' id='arrow'></div>
+	      </td>
+	      <td><span class="timeSpan">{{row.startingName}} -
+		  {{row.endingName}}</span>&nbsp;
+		<span class="accounts_display">{{row.numAccounts}} accounts</span><br/>
+		<table class='detail' cellspacing=0>
+		  <tr class='heading'>
+		    <td>Name</td>
+		    <td>Balance at start of term</td>
+		    <td>Payment</td>
+		  <tr>
+		  <tr ng-repeat="creditor in row.table" class="outcomeDetail">
+		    <td class="creditorName">{{creditor.Name}}</td>
+		    <td class="creditorAccount">{{creditor.account | currency}}</td>
+		    <td class="creditorPay">{{creditor.pay | currency}}/month</td>
+		  </tr>
+		</table>
+	      </td>
+	    </tr>
+	    
 	  </table>
-	</td>
-      </tr>
-    </table>
+</div>
 
 
 </body>

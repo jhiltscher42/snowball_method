@@ -95,3 +95,35 @@
        width: 600px;
        height: 400px;
        }
+
+.pane {
+    background-color:#EEEEEE;
+    width: 700px;
+    height: 500px;
+    display: none;
+    overflow: scroll;
+}
+
+.activePane {
+    display: block;
+}
+
+.tabs li {
+    display: inline-block;
+    cursor: pointer;
+    background-color: #BBBBBB;
+    border-width:1px;
+    border-style:solid solid none solid;
+    margin:0px;
+    width: 100px;
+    text-align: center;
+}
+
+.tabs li.selectedTab {
+   background-color:#EEEEEE;
+}
+
+.tabs {
+    padding: 0px;
+    margin:0px;
+}
